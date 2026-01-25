@@ -1,0 +1,9 @@
+Source: restreamx-plugin
+Section: database
+Priority: optional
+Maintainer: ReStreamX
+Standards-Version: 4.6.2
+
+Package: restreamx-plugin
+Architecture: amd64
+Description: ReStreamX MySQL plugin

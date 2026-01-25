@@ -1,0 +1,11 @@
+name: restreamx-ledgerd
+arch: amd64
+platform: linux
+version: 0.1.0
+section: default
+priority: extra
+maintainer: ReStreamX
+description: ReStreamX ledger daemon
+contents:
+  - src: ./restreamx-ledgerd
+    dst: /usr/local/bin/restreamx-ledgerd

@@ -1,5 +1,13 @@
 FROM mysql:8.4 AS build
-RUN apt-get update && apt-get install -y build-essential cmake git pkg-config && rm -rf /var/lib/apt/lists/*
+RUN set -eux; \
+    if command -v apt-get >/dev/null 2>&1; then \
+        apt-get update; \
+        apt-get install -y build-essential cmake git pkg-config; \
+        rm -rf /var/lib/apt/lists/*; \
+    else \
+        microdnf install -y gcc gcc-c++ make cmake git pkgconf-pkg-config; \
+        microdnf clean all; \
+    fi
 WORKDIR /src
 COPY mysql-plugin ./mysql-plugin
 RUN cmake -S mysql-plugin -B /build && cmake --build /build

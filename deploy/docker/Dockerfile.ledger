@@ -1,6 +1,6 @@
 FROM golang:1.22 AS build
 WORKDIR /src
-COPY go.mod go.sum ./
+COPY go.mod ./
 RUN go mod download
 COPY ledger ./ledger
 RUN CGO_ENABLED=0 go build -o /out/restreamx-ledgerd ./ledger/cmd/restreamx-ledgerd

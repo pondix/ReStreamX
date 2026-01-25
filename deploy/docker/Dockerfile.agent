@@ -1,9 +1,8 @@
 FROM golang:1.22 AS build
-WORKDIR /src
+WORKDIR /src/restreamx
 COPY go.mod go.sum ./
-COPY ledger ./ledger
-COPY pkg ./pkg
-COPY agent ./agent
+RUN go mod download
+COPY . .
 RUN CGO_ENABLED=0 go build -o /out/restreamx-agent ./agent/cmd/restreamx-agent
 
 FROM debian:bookworm-slim

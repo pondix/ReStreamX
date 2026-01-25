@@ -1,0 +1,72 @@
+version: '3.9'
+services:
+  ledger1:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.ledger
+    command: ["/usr/local/bin/restreamx-ledgerd","-listen=:7000","-metrics=:7001","-leader=ledger1:7000","-peers=ledger1:7000,ledger2:7000,ledger3:7000"]
+    ports: ["7000:7000","7001:7001"]
+  ledger2:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.ledger
+    command: ["/usr/local/bin/restreamx-ledgerd","-listen=:7000","-metrics=:7001","-leader=ledger1:7000","-peers=ledger1:7000,ledger2:7000,ledger3:7000"]
+  ledger3:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.ledger
+    command: ["/usr/local/bin/restreamx-ledgerd","-listen=:7000","-metrics=:7001","-leader=ledger1:7000","-peers=ledger1:7000,ledger2:7000,ledger3:7000"]
+
+  mysql1:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports: ["3306:3306"]
+  mysql2:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+  mysql3:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+
+  agent1:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.agent
+    command: ["/usr/local/bin/restreamx-agent","-ledger=http://ledger1:7000","-mysql-host=mysql1","-mysql-user=restreamx_apply","-mysql-pass=apply","-mysql-db=demo"]
+    depends_on: [mysql1, ledger1]
+    ports: ["9090:9090"]
+  agent2:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.agent
+    command: ["/usr/local/bin/restreamx-agent","-ledger=http://ledger1:7000","-mysql-host=mysql2","-mysql-user=restreamx_apply","-mysql-pass=apply","-mysql-db=demo"]
+    depends_on: [mysql2, ledger1]
+  agent3:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.agent
+    command: ["/usr/local/bin/restreamx-agent","-ledger=http://ledger1:7000","-mysql-host=mysql3","-mysql-user=restreamx_apply","-mysql-pass=apply","-mysql-db=demo"]
+    depends_on: [mysql3, ledger1]
+
+  router1:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.router
+    command: ["/usr/local/bin/restreamx-router","-ledger=http://ledger1:7000","-owners=mysql1=mysql1:3306,mysql2=mysql2:3306,mysql3=mysql3:3306","-mysql-user=restreamx_router","-mysql-pass=router","-mysql-db=demo","-admin-user=root","-admin-pass=root"]
+    ports: ["8080:8080","8081:8081"]
+    depends_on: [ledger1, mysql1]
+  router2:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.router
+    command: ["/usr/local/bin/restreamx-router","-ledger=http://ledger1:7000","-owners=mysql1=mysql1:3306,mysql2=mysql2:3306,mysql3=mysql3:3306","-mysql-user=restreamx_router","-mysql-pass=router","-mysql-db=demo","-admin-user=root","-admin-pass=root"]
+    depends_on: [ledger1, mysql1]

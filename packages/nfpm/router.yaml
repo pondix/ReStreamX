@@ -1,0 +1,11 @@
+name: restreamx-router
+arch: amd64
+platform: linux
+version: 0.1.0
+section: default
+priority: extra
+maintainer: ReStreamX
+description: ReStreamX router
+contents:
+  - src: ./restreamx-router
+    dst: /usr/local/bin/restreamx-router

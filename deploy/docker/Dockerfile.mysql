@@ -1,0 +1,11 @@
+FROM mysql:8.4 AS build
+RUN apt-get update && apt-get install -y build-essential cmake git pkg-config && rm -rf /var/lib/apt/lists/*
+WORKDIR /src
+COPY mysql-plugin ./mysql-plugin
+RUN cmake -S mysql-plugin -B /build && cmake --build /build
+
+FROM mysql:8.4
+COPY --from=build /build/restreamx.so /usr/lib/mysql/plugin/restreamx.so
+COPY mysql-plugin/packaging/restreamx.cnf.snippet /etc/mysql/conf.d/restreamx.cnf
+COPY mysql-plugin/packaging/restreamx.install.sql /docker-entrypoint-initdb.d/10-restreamx-install.sql
+COPY deploy/docker/mysql-init.sql /docker-entrypoint-initdb.d/20-restreamx-schema.sql

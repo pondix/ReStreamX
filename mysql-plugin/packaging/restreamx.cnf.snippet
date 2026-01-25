@@ -1,0 +1,8 @@
+[mysqld]
+plugin_load_add=restreamx.so
+restreamx.mode=REPLICA
+restreamx.ipc_socket_path=/var/run/restreamx.sock
+binlog_format=ROW
+binlog_row_image=FULL
+gtid_mode=OFF
+enforce_gtid_consistency=OFF

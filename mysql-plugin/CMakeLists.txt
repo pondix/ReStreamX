@@ -3,9 +3,12 @@ project(restreamx_plugin CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 
-find_path(MYSQL_INCLUDE_DIR mysql/plugin.h)
+set(MYSQL_INCLUDE_DIR "" CACHE PATH "Path to MySQL include directory (containing mysql/plugin.h)")
 if(NOT MYSQL_INCLUDE_DIR)
-  message(FATAL_ERROR "mysql headers not found")
+  find_path(MYSQL_INCLUDE_DIR mysql/plugin.h)
+endif()
+if(NOT MYSQL_INCLUDE_DIR)
+  message(FATAL_ERROR "mysql headers not found. Install MySQL development headers (libmysqlclient-dev or mysql-community-devel) or set MYSQL_INCLUDE_DIR to the directory containing mysql/plugin.h.")
 endif()
 
 add_library(restreamx SHARED

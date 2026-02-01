@@ -5,7 +5,8 @@ RUN set -eux; \
         apt-get install -y build-essential cmake git pkg-config default-libmysqlclient-dev; \
         rm -rf /var/lib/apt/lists/*; \
     else \
-        microdnf install -y gcc gcc-c++ make cmake git pkgconf-pkg-config mysql-community-devel; \
+        microdnf install -y https://repo.mysql.com/mysql84-community-release-el9-1.noarch.rpm; \
+        microdnf install -y gcc gcc-c++ make cmake git pkgconf pkgconf-pkg-config mysql-community-devel; \
         microdnf clean all; \
     fi
 WORKDIR /src

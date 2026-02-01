@@ -6,7 +6,7 @@ COPY . .
 RUN CGO_ENABLED=0 go build -o /out/restreamx-router ./router/cmd/restreamx-router
 
 FROM debian:bookworm-slim
-RUN apt-get update && apt-get install -y mysql-client ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y default-mysql-client ca-certificates && rm -rf /var/lib/apt/lists/*
 COPY --from=build /out/restreamx-router /usr/local/bin/restreamx-router
 EXPOSE 8080 8081
 ENTRYPOINT ["/usr/local/bin/restreamx-router"]

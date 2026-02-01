@@ -6,7 +6,7 @@ COPY . .
 RUN CGO_ENABLED=0 go build -o /out/restreamx-agent ./agent/cmd/restreamx-agent
 
 FROM debian:bookworm-slim
-RUN apt-get update && apt-get install -y mysql-client ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y default-mysql-client ca-certificates && rm -rf /var/lib/apt/lists/*
 COPY --from=build /out/restreamx-agent /usr/local/bin/restreamx-agent
 EXPOSE 9090
 ENTRYPOINT ["/usr/local/bin/restreamx-agent"]
